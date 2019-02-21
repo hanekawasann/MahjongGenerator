@@ -1,7 +1,6 @@
-package com.yukms;
+package com.yukms.entity;
 
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
@@ -11,16 +10,18 @@ import javax.imageio.ImageIO;
 import org.springframework.core.io.DefaultResourceLoader;
 
 /**
+ * 麻将牌
+ *
  * @author yukms 2019/2/20
  */
-public enum Mahjong {
+public enum MahjongCardType {
 
     CHARACTER_ONE("一万", MahjongConstant.INDEX_CHARACTERS[0]),
     CHARACTER_TWO("二万", MahjongConstant.INDEX_CHARACTERS[1]),
     CHARACTER_THREE("三万", MahjongConstant.INDEX_CHARACTERS[2]),
     CHARACTER_FOUR("四万", MahjongConstant.INDEX_CHARACTERS[3]),
     CHARACTER_FIVE("五万", MahjongConstant.INDEX_CHARACTERS[4]),
-    CHARACTER_FIVE_RED("五万", MahjongConstant.INDEX_CHARACTERS[5]),
+    CHARACTER_FIVE_RED("赤五万", MahjongConstant.INDEX_CHARACTERS[5]),
     CHARACTER_SIX("六万", MahjongConstant.INDEX_CHARACTERS[6]),
     CHARACTER_SEVEN("七万", MahjongConstant.INDEX_CHARACTERS[7]),
     CHARACTER_EIGHT("八万", MahjongConstant.INDEX_CHARACTERS[8]),
@@ -30,7 +31,7 @@ public enum Mahjong {
     DOT_THREE("三筒", MahjongConstant.INDEX_DOTS[2]),
     DOT_FOUR("四筒", MahjongConstant.INDEX_DOTS[3]),
     DOT_FIVE("五筒", MahjongConstant.INDEX_DOTS[4]),
-    DOT_FIVE_RED("五筒", MahjongConstant.INDEX_DOTS[5]),
+    DOT_FIVE_RED("赤五筒", MahjongConstant.INDEX_DOTS[5]),
     DOT_SIX("六筒", MahjongConstant.INDEX_DOTS[6]),
     DOT_SEVEN("七筒", MahjongConstant.INDEX_DOTS[7]),
     DOT_EIGHT("八筒", MahjongConstant.INDEX_DOTS[8]),
@@ -40,7 +41,7 @@ public enum Mahjong {
     BAMBOO_THREE("三条", MahjongConstant.INDEX_BAMBOOS[2]),
     BAMBOO_FOUR("四条", MahjongConstant.INDEX_BAMBOOS[3]),
     BAMBOO_FIVE("五条", MahjongConstant.INDEX_BAMBOOS[4]),
-    BAMBOO_FIVE_RED("五条", MahjongConstant.INDEX_BAMBOOS[5]),
+    BAMBOO_FIVE_RED("赤五条", MahjongConstant.INDEX_BAMBOOS[5]),
     BAMBOO_SIX("六条", MahjongConstant.INDEX_BAMBOOS[6]),
     BAMBOO_SEVEN("七条", MahjongConstant.INDEX_BAMBOOS[7]),
     BAMBOO_EIGHT("八条", MahjongConstant.INDEX_BAMBOOS[8]),
@@ -54,12 +55,12 @@ public enum Mahjong {
     DRAGON_RED("中", MahjongConstant.INDEX_DRAGONS[2]);
 
     private String name;
-    private ByteArrayOutputStream outputStream;
+    private BufferedImage image;
 
-    public static Mahjong ofName(String name) {
-        for (Mahjong mahjong : Mahjong.values()) {
-            if (mahjong.getName().equals(name)) {
-                return mahjong;
+    public static MahjongCardType ofName(String name) {
+        for (MahjongCardType mahjongCardType : MahjongCardType.values()) {
+            if (mahjongCardType.getName().equals(name)) {
+                return mahjongCardType;
             }
         }
         throw new IllegalArgumentException("name");
@@ -69,26 +70,19 @@ public enum Mahjong {
         return name;
     }
 
-    public ByteArrayOutputStream getOutputStream() {
-        return outputStream;
+    public BufferedImage getImage() {
+        return image;
     }
 
-    Mahjong(String name, int[] index) {
+    MahjongCardType(String name, int[] index) {
         this.name = name;
-        this.outputStream = getOutputStream(index);
+        this.image = getBufferedImage(index);
     }
 
-    private static ByteArrayOutputStream getOutputStream(int[] index) {
+    private static BufferedImage getBufferedImage(int[] index) {
         int x = MahjongConstant.X + (MahjongConstant.WIDTH + MahjongConstant.WIDTH_SPACE) * (index[0] - 1);
         int y = MahjongConstant.Y + (MahjongConstant.HEIGHT + MahjongConstant.HEIGHT_SPACE) * (index[1] - 1);
-        BufferedImage bufferedImage = MahjongConstant.IMAGE
-            .getSubimage(x, y, MahjongConstant.WIDTH, MahjongConstant.HEIGHT);
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        try {
-            ImageIO.write(bufferedImage, "png", outputStream);
-        } catch (IOException e) {
-        }
-        return outputStream;
+        return MahjongConstant.IMAGE.getSubimage(x, y, MahjongConstant.WIDTH, MahjongConstant.HEIGHT);
     }
 
     private static class MahjongConstant {

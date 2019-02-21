@@ -14,6 +14,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.WindowConstants;
 
+import com.yukms.entity.MahjongCardType;
+import com.yukms.util.BufferedImageUtil;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 
@@ -64,10 +66,11 @@ public class BufferedImageTest {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
-    private static void show(Mahjong mahjong) throws IOException {
+    private static void show(MahjongCardType mahjongCardType) throws IOException {
         JFrame frame = new JFrame();
         frame.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
-        JLabel jLabel = getJLabel(mahjong.getOutputStream());
+        ByteArrayOutputStream outputStream = BufferedImageUtil.getOutputStream(mahjongCardType.getImage());
+        JLabel jLabel = getJLabel(outputStream);
         frame.getContentPane().add(jLabel);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setVisible(true);
@@ -124,7 +127,7 @@ public class BufferedImageTest {
     }
 
     public static void main(String[] args) throws IOException {
-        show(Mahjong.DRAGON_WHITE);
+        show(MahjongCardType.CHARACTER_SIX);
     }
 
 }
