@@ -206,8 +206,8 @@ public class MahjongFrame extends JFrame {
     }
 
     private boolean isAdd(MahjongCardType cardType) {
-        if (creatCards.size() >= 13) {
-            // 牌组不超过13张
+        if (creatCards.size() >= 14) {
+            // 牌组不超过14张
             return false;
         }
         int cardSize = getCardSize(cardType);
